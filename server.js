@@ -53,18 +53,20 @@ io.on("connection", (socket) =>{
             // ks.setOption('globalDelayPressMillisec', 10);
             // ks.sendKeys(msg);
             //console.log(msg);
-            if(msg == 'up' || msg == 'down' || msg == 'left' || msg == 'right' || msg == 'space' || msg == 'right_shift'){
+            if(msg == 'LSHIFT' || msg == 'LCTRL' || msg == 'RCTRL'){
+                ks.sendKey(msg); 
+                charm.position(1,21);
+                charm.erase("line");
+                charm.write("pressed key: "+msg);
+            }
+            else{
+            // if(msg == 'up' || msg == 'p' || msg == 'q' || msg == 'm' || msg == 'l' || msg == 'x' || msg == 'r' ||  msg == 'down' || msg == 'left' || msg == 'right' || msg == 'space' || msg == 'right_shift'){
                  robot.keyTap(msg);
                  charm.position(1,21);
                  charm.erase("line");
                  charm.write("pressed key: "+msg);
             }
-            else if(msg == 'x' || msg == 'r' || msg == 'LSHIFT' || msg == 'LCTRL' || msg == 'RCTRL'){
-                ks.sendKey(msg);
-                charm.position(1,21);
-                charm.erase("line");
-                charm.write("pressed key: "+msg);
-            }
+             
         }
     });
     socket.on("position",msg =>{
@@ -123,32 +125,35 @@ io.on("connection", (socket) =>{
 //     console.log(msg);
 //     });
     socket.on("input",msg =>{
-        ks.startBatch().batchTypeText(msg).sendBatch();
+        //ks.startBatch().batchTypeText(msg).sendBatch();
         // reply += "input received from client: " + msg;
         charm.position(1,11);
         charm.erase("line");
         charm.write("input received from client: " + msg);
         
     }),
-    // socket.on("volum",msg =>{
-    //     if(msg == 'x'){
-    //         ks.sendKey("f1");
-    //     }
-    //     else if(msg == 'up'){
-    //         ks.sendKey('f2');
-    //     }
-    //     else if(msg == 'down'){
-    //         robot.keyTap('f3');
-    //     }
-    // }),
-    // socket.on("brightness",msg =>{
-    //     if(msg == 'up'){
-    //         robot.keyTap('f12');
-    //     }
-    //     else if(msg == 'down'){
-    //         robot.keyTap('f11');
-    //     }
-    // }),
+    socket.on("volum",msg =>{
+        if(msg == 'x'){
+            charm.position(1,12);
+        charm.erase("line");
+        charm.write("volum off");
+            //robot.keyTap('f1','alt');
+        }
+        else if(msg == 'up'){
+            robot.keyTap('f2','control');
+        }
+        else if(msg == 'down'){
+            robot.keyTap('f3','control');
+        }
+    }),
+    socket.on("brightness",msg =>{
+        if(msg == 'up'){
+            robot.keyTap('f12','control');
+        }
+        else if(msg == 'down'){
+            robot.keyTap('f11','control');
+        }
+    }),
     socket.on("grant",msg =>{
         robot.mouseToggle("down");
     }),
@@ -233,6 +238,13 @@ io.on("connection", (socket) =>{
             charm.position(1,19);
             charm.erase("line");
             charm.write("shutdown pc");
+        }
+        else if(msg == "delete"){
+            robot.keyTap('delete');
+
+            charm.position(1,19);
+            charm.erase("line");
+            charm.write("delete");
         }
         //robot.mouseClick();
         
