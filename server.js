@@ -13,7 +13,10 @@ var first = true;
 const port = 8000;
  server.listen(port,()=> {console.log("server run on port: " + port)});
  var screenSize = robot.getScreenSize();
- 
+ var firstR = false,countinueR = false,
+ firstL = false,countinueL = false,
+ firstU = false,countinueU = false,
+ firstD = false,countinueD = false;
  console.log(screenSize);
 // robot.keyTap("f2");
 
@@ -37,8 +40,133 @@ io.on("connection", (socket) =>{
         first = false; 
     //}
     charm.write("a user connected.");
+    
     //charm.reset();
+    socket.on("toggledown",msg =>{
+        robot.keyToggle(msg,'down');
+        
+        charm.position(1,21);
+        charm.erase('line');
+        charm.write("toggledown: "+msg);
+    })
+    socket.on("toggleup",msg =>{
+        robot.keyToggle(msg,'up');
+
+        charm.position(1,22);
+        charm.erase('line');
+        charm.write("toggleup: "+msg);
+    })
+/* socket.on("direction",msg=>{
+     
+        if(msg == 'right'&& firstR == false && countinueR == false){
+            firstR = true;
+            countinueR = true;
+            charm.position(1,5);
+            charm.write("if aval");
+        robot.keyToggle('right','down');
+        }
+        else if(msg == 'right'&& firstR == true && countinueR == true){
+           firstR = false;
+           charm.position(1,5);
+           charm.erase('line');
+           charm.position(1,6);
+           charm.write("if dovom");
+       }
+       else if((msg == 'smooth'|| msg == 'left')  && countinueR == true){
+           countinueR = false;
+           firstR = false;
+           charm.position(1,5);
+           charm.erase('line');
+           charm.position(1,6);
+           charm.erase('line');
+           charm.position(1,7);
+           charm.write("if sevom");
+           robot.keyToggle('right','down');
+       }
+      // firstR == true ? robot.keyToggle(msg,'down'):null;
+     //  countinueR == true? null: robot.keyToggle('right','up');
+
+       if(msg == 'left'&& firstL == false && countinueL == false){
+        firstL = true;
+        countinueL = true;
+        }
+        else if(msg == 'left'&& firstL == true && countinueL == true){
+        firstL = false;
+        }
+        else if(msg == 'smooth'|| msg == 'right'  && countinueL == true){
+            countinueL = false;
+            firstL = false;
+        }
+        firstL == true ? robot.keyToggle('left','down'):null;
+        countinueL == true? null: robot.keyToggle('left','up');
+
+    if(msg == 'up'&& firstU == false && countinueU == false){
+        firstU = true;
+        countinueU = true;
+        }
+        else if(msg == 'up'&& firstU == true && countinueU == true){
+        firstU = false;
+        }
+        else if(msg == 'smooth'|| msg == 'down'  && countinueU == true){
+        countinueU = false;
+        firstU = false;
+        }
+        firstU == true ? robot.keyToggle('up','down'):null;
+        countinueU == true? null: robot.keyToggle('up','up');
+
+        if(msg == 'down'&& firstD == false && countinueD == false){
+            firstD = true;
+            countinueD = true;
+        }
+        else if(msg == 'down'&& firstD == true && countinueD == true){
+        firstD = false;
+        }
+        else if(msg == 'smooth'|| msg == 'up'  && countinueD == true){
+        countinueD = false;
+        firstD = false;
+        }
+        firstD == true ? robot.keyToggle('down','down'):null;
+        countinueD == true? null: robot.keyToggle('down','up');
+
+        
+        charm.position(1,23);
+        //charm.erase('line');
+        charm.write("msg: "+msg);
+        
+        charm.position(1,24);
+        //charm.erase('line');
+        charm.write("countinuR: "+countinueR);
+        
+        charm.position(1,25);
+        //charm.erase('line');
+        charm.write("countinuD: "+countinueD);
+        
+        charm.position(1,26);
+        //charm.erase('line');
+        charm.write("countinuL: "+countinueL);
+        
+        charm.position(1,27);
+        //charm.erase('line');
+        charm.write("countinuU: "+countinueU);
+        
+        charm.position(1,28);
+        //charm.erase('line');
+        charm.write("firstR: "+firstR);
+        
+        charm.position(1,29);
+        //charm.erase('line');
+        charm.write("firstd: "+firstD);
+        
+        charm.position(1,30);
+        //charm.erase('line');
+        charm.write("firstl: "+firstL);
+        
+        charm.position(1,31);
+        //charm.erase('line');
+        charm.write("firstu: "+firstU);
+    })*/
     socket.on("chat message",msg =>{
+       // robot.keyToggle(msg,'down');
         //console.log(msg);
         //io.emit("send","msg");
         //robot.keyTap('f1');
@@ -61,7 +189,8 @@ io.on("connection", (socket) =>{
             }
             else{
             // if(msg == 'up' || msg == 'p' || msg == 'q' || msg == 'm' || msg == 'l' || msg == 'x' || msg == 'r' ||  msg == 'down' || msg == 'left' || msg == 'right' || msg == 'space' || msg == 'right_shift'){
-                 robot.keyTap(msg);
+                 //robot.keyTap(msg);
+                 robot.keyToggle(msg,'down');
                  charm.position(1,21);
                  charm.erase("line");
                  charm.write("pressed key: "+msg);
@@ -126,7 +255,7 @@ io.on("connection", (socket) =>{
 //     });
     socket.on("input",msg =>{
         //ks.startBatch().batchTypeText(msg).sendBatch();
-        // reply += "input received from client: " + msg;
+        
         charm.position(1,11);
         charm.erase("line");
         charm.write("input received from client: " + msg);
@@ -137,13 +266,13 @@ io.on("connection", (socket) =>{
             charm.position(1,12);
         charm.erase("line");
         charm.write("volum off");
-            //robot.keyTap('f1','alt');
+        robot.keyTap('f6');//,'alt');
         }
         else if(msg == 'up'){
-            robot.keyTap('f2','control');
+            robot.keyTap('f8');//,'control');
         }
         else if(msg == 'down'){
-            robot.keyTap('f3','control');
+            robot.keyTap('f7');//,'control');
         }
     }),
     socket.on("brightness",msg =>{
