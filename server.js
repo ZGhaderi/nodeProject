@@ -1,47 +1,29 @@
 const express = require("express");
-const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
-var robot = require("robotjs");
-var ks = require("node-key-sender");
+const app     = express();
+const server  = require("http").createServer(app);
+const io      = require("socket.io").listen(server);
+var robot     = require("robotjs");
+var ks        = require("node-key-sender");
 
 var charm = require('charm')();
 charm.pipe(process.stdout);
-//charm.reset();
-var first = true;
-//io.set('transports', ['websocket']);
 const port = 8000;
  server.listen(port,()=> {console.log("server run on port: " + port)});
  var screenSize = robot.getScreenSize();
- var firstR = false,countinueR = false,
- firstL = false,countinueL = false,
- firstU = false,countinueU = false,
- firstD = false,countinueD = false;
+ enter=()=>{
+    robot.keyTap('enter');
+    charm.position(1,21);
+    charm.erase('line');
+    charm.write("omad: ");
+}
  console.log(screenSize);
-// robot.keyTap("f2");
-
-   // ks.sendKey("print_screen");
-    //robot.keyTap("f");
-//     app.post('/thank', urlencodedParser, function (req, res){
-//   var reply='';
-//   reply += "Your name is" + req.body.name;
-//   reply += "Your E-mail id is" + req.body.email; 
-//   reply += "Your address is" + req.body.address;
-//   reply += "Your mobile number is" + req.body.mobilno;
-//   res.send(reply);
-//  });
 
 io.on("connection", (socket) =>{
     var h,w,x,y;
     charm.erase("line");
     charm.position(1,1);
-    //if(first){
-        charm.reset();
-        first = false; 
-    //}
+    charm.reset();
     charm.write("a user connected.");
-    
-    //charm.reset();
     socket.on("toggledown",msg =>{
         robot.keyToggle(msg,'down');
         
@@ -56,115 +38,7 @@ io.on("connection", (socket) =>{
         charm.erase('line');
         charm.write("toggleup: "+msg);
     })
-/* socket.on("direction",msg=>{
-     
-        if(msg == 'right'&& firstR == false && countinueR == false){
-            firstR = true;
-            countinueR = true;
-            charm.position(1,5);
-            charm.write("if aval");
-        robot.keyToggle('right','down');
-        }
-        else if(msg == 'right'&& firstR == true && countinueR == true){
-           firstR = false;
-           charm.position(1,5);
-           charm.erase('line');
-           charm.position(1,6);
-           charm.write("if dovom");
-       }
-       else if((msg == 'smooth'|| msg == 'left')  && countinueR == true){
-           countinueR = false;
-           firstR = false;
-           charm.position(1,5);
-           charm.erase('line');
-           charm.position(1,6);
-           charm.erase('line');
-           charm.position(1,7);
-           charm.write("if sevom");
-           robot.keyToggle('right','down');
-       }
-      // firstR == true ? robot.keyToggle(msg,'down'):null;
-     //  countinueR == true? null: robot.keyToggle('right','up');
 
-       if(msg == 'left'&& firstL == false && countinueL == false){
-        firstL = true;
-        countinueL = true;
-        }
-        else if(msg == 'left'&& firstL == true && countinueL == true){
-        firstL = false;
-        }
-        else if(msg == 'smooth'|| msg == 'right'  && countinueL == true){
-            countinueL = false;
-            firstL = false;
-        }
-        firstL == true ? robot.keyToggle('left','down'):null;
-        countinueL == true? null: robot.keyToggle('left','up');
-
-    if(msg == 'up'&& firstU == false && countinueU == false){
-        firstU = true;
-        countinueU = true;
-        }
-        else if(msg == 'up'&& firstU == true && countinueU == true){
-        firstU = false;
-        }
-        else if(msg == 'smooth'|| msg == 'down'  && countinueU == true){
-        countinueU = false;
-        firstU = false;
-        }
-        firstU == true ? robot.keyToggle('up','down'):null;
-        countinueU == true? null: robot.keyToggle('up','up');
-
-        if(msg == 'down'&& firstD == false && countinueD == false){
-            firstD = true;
-            countinueD = true;
-        }
-        else if(msg == 'down'&& firstD == true && countinueD == true){
-        firstD = false;
-        }
-        else if(msg == 'smooth'|| msg == 'up'  && countinueD == true){
-        countinueD = false;
-        firstD = false;
-        }
-        firstD == true ? robot.keyToggle('down','down'):null;
-        countinueD == true? null: robot.keyToggle('down','up');
-
-        
-        charm.position(1,23);
-        //charm.erase('line');
-        charm.write("msg: "+msg);
-        
-        charm.position(1,24);
-        //charm.erase('line');
-        charm.write("countinuR: "+countinueR);
-        
-        charm.position(1,25);
-        //charm.erase('line');
-        charm.write("countinuD: "+countinueD);
-        
-        charm.position(1,26);
-        //charm.erase('line');
-        charm.write("countinuL: "+countinueL);
-        
-        charm.position(1,27);
-        //charm.erase('line');
-        charm.write("countinuU: "+countinueU);
-        
-        charm.position(1,28);
-        //charm.erase('line');
-        charm.write("firstR: "+firstR);
-        
-        charm.position(1,29);
-        //charm.erase('line');
-        charm.write("firstd: "+firstD);
-        
-        charm.position(1,30);
-        //charm.erase('line');
-        charm.write("firstl: "+firstL);
-        
-        charm.position(1,31);
-        //charm.erase('line');
-        charm.write("firstu: "+firstU);
-    })*/
     socket.on("chat message",msg =>{
        // robot.keyToggle(msg,'down');
         //console.log(msg);
@@ -250,12 +124,10 @@ io.on("connection", (socket) =>{
 //     socket.on("now",msg =>{
 //         console.log("now :"+msg);
 //     });
-//    socket.on("text",msg =>{
-//     console.log(msg);
-//     });
+   
     socket.on("input",msg =>{
         //ks.startBatch().batchTypeText(msg).sendBatch();
-        
+        robot.typeString(msg);
         charm.position(1,11);
         charm.erase("line");
         charm.write("input received from client: " + msg);
@@ -265,14 +137,22 @@ io.on("connection", (socket) =>{
         if(msg == 'x'){
             charm.position(1,12);
         charm.erase("line");
-        charm.write("volum off");
-        robot.keyTap('f6');//,'alt');
+        charm.write('mute');
+        ks.sendKey('f7');
         }
         else if(msg == 'up'){
-            robot.keyTap('f8');//,'control');
+            ks.sendKey('f10');
+            charm.position(1,12);
+            charm.erase("line");
+            charm.write('up');
+            //robot.keyTap('f8');//,'control');
         }
         else if(msg == 'down'){
-            robot.keyTap('f7');//,'control');
+            ks.sendKey('f11');
+            charm.position(1,12);
+            charm.erase("line");
+            charm.write('down');
+           // robot.keyTap('f7');//,'control');
         }
     }),
     socket.on("brightness",msg =>{
@@ -308,6 +188,7 @@ io.on("connection", (socket) =>{
         charm.write("mouse scroll: " +msg);
         }
     }),
+   
     socket.on("click",msg =>{
         if(msg == "singleTap"){
             robot.mouseClick();
@@ -360,7 +241,7 @@ io.on("connection", (socket) =>{
         else if(msg == "shutdown"){
             robot.keyTap('d','command'); 
             robot.keyTap('f4','alt');
-            robot.keyTap('down');
+            //robot.keyTap('down');
             //robot.keyTap('enter');
             //reply += "shutdown pc";
             
@@ -368,12 +249,50 @@ io.on("connection", (socket) =>{
             charm.erase("line");
             charm.write("shutdown pc");
         }
+        else if(msg == "sleep"){
+            robot.keyTap('d','command'); 
+            robot.keyTap('f4','alt');
+            robot.keyTap('up');
+            charm.position(1,19);
+            charm.erase("line");
+            charm.write("sleep pc");
+        }
         else if(msg == "delete"){
             robot.keyTap('delete');
 
             charm.position(1,19);
             charm.erase("line");
             charm.write("delete");
+        }
+        if(msg == "folder"){
+            robot.keyTap('d','command'); 
+            robot.keyTap('command'); 
+            robot.typeString('file explorer');
+            ks.sendKey('enter');
+            charm.position(1,20);
+            charm.erase("line");
+            charm.write("open file explorer");
+        }
+        if(msg == "chrome"){
+            robot.keyTap('d','command'); 
+            robot.keyTap('command'); 
+            robot.typeString('google chrome');
+            ks.sendKey('enter');
+            charm.position(1,20);
+            charm.erase("line");
+            charm.write("open google chrome");
+        }
+        if(msg == "enter"){
+            robot.keyTap('enter'); 
+            charm.position(1,20);
+            charm.erase("line");
+            charm.write("press enter");
+        }
+        if(msg == "close"){
+            robot.keyTap('f4','alt');
+            charm.position(1,20);
+            charm.erase("line");
+            charm.write("close window");
         }
         //robot.mouseClick();
         
