@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "charm": "^1.0.2",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "node-key-sender": "^1.0.11",
     "nodemon": "^1.19.1",
     "robotjs": "^0.5.1",
